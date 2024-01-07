@@ -1,0 +1,152 @@
+<!-- create_author_with_books.html -->
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Create Author with Books</title>
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+        <style>
+            button {
+                background-color: #04AA6D;
+                border: none;
+                color: white;
+                padding: 10px 24px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+                margin: 4px 2px;
+                cursor: pointer;
+              }
+            .btn-danger{
+                background-color: #d62e2e;
+            }
+            .btn-primary{
+                background-color: #04AA6D;
+            }
+            .container{
+                padding: 5px 40px;
+                border: 1px solid black;
+                marging-top: 10px;
+                padding-bottom:20px;
+            }
+            .form-control {
+                width: 30%;
+                padding: 12px 20px;
+                margin: 8px 0;
+                display: inline-block;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                box-sizing: border-box;
+            }
+            .container-book{
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                gap: 20px;
+                padding: 20px 0px;
+            }
+            .add-btn{
+                background-color: #b8b8b8;
+                color: #000000;
+            }
+            .save-btn{
+                width:50%;
+                border-radius: 50px;
+            }
+            .save-btn:hover{
+                background-color: #018857;
+            }
+            .save-div{
+                display:flex;
+                justify-content: center;
+            }
+            .remove-div{
+                display:flex;
+                justify-content: center;
+                flex-grow: 1;            }
+            
+        </style>
+    </head>
+    <body>
+        <h2 class="border border-red-200">Create Author with Books</h2>
+
+        <form class="container" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <h2 >Author Details:</h2>
+            {{ author_form.as_p }} 
+            {{ book_formset.management_form }}
+            <h2 >Author's Books:</h2>
+            <div id="book-forms">
+                <div id="book-forms-0" class="book-form">
+                    <div class="remove-div">
+                    </div>
+                    <div class="">
+                        {% for form in book_formset.forms %}
+                    </div>
+                    <div class="container-book">
+                        {{ form.as_table }}
+                        <div class="remove-div">
+                            <button type="button" name="remove-0-button" class="remove-book btn-danger">Remove</button>
+                        </div>
+
+                    </div>
+                    {% endfor %}
+
+                </div>
+            </div>
+
+            <button class="add-btn" type="button" id="add-book">Add Another Book</button>
+            <div class="save-div">
+                <button type="submit" class="save-btn" > Save </button>
+            </div>
+        </form>
+
+        <script>
+            $(document).ready(function () {
+                // Function to add a new book form
+                $("#add-book").click(function () {
+                    var formCount = $("#id_book-TOTAL_FORMS").val();
+                    var newForm = $("#book-forms-0").clone();
+                    console.log(formCount,'clicked')
+
+                    // Update form indices and clear input values
+                    newForm.find(":input").each(function () {
+                        console.log($(this));
+                        var name = $(this)
+                            .attr("name")
+                            .replace(
+                                "-" + 0 + "-",
+                                "-" + formCount + "-"
+                            );
+                        var id = "id_" + name;
+                        console.log({ name: name, id: id })
+                        $(this)
+                            .attr({ name: name, id: id })
+                            .val("")
+                            .removeAttr("checked");
+                    });
+                    newForm.attr({id:`book-form-${formCount}`})
+
+                    // Update total forms count
+                    $("#id_book-TOTAL_FORMS").val(parseInt(formCount) + 1);
+
+                    // Append the new form
+                    $("#book-forms").append(newForm);
+                });
+
+                // Function to remove the last book form
+                $("#book-forms").on("click", ".remove-book", function () {
+                    var formCount = $("#id_book-TOTAL_FORMS").val();
+                    console.log(formCount)
+                    if (formCount > 1) {
+                        $(this).closest(".book-form").remove();
+                        $("#id_book-TOTAL_FORMS").val(
+                            parseInt(formCount) - 1
+                        );
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>

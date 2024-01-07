@@ -1,0 +1,43 @@
+# Ignore virtual environment
+venv/
+
+# Ignore database files
+db.sqlite3
+
+# Ignore local settings
+local_settings.py
+
+# Ignore migration files
+*/migrations/
+
+# Ignore static files
+staticfiles/
+
+# Ignore media files
+media/
+
+# Ignore compiled Python files
+__pycache__/
+*.pyc
+*.pyo
+
+# Ignore logs
+*.log
+
+# Ignore environment-specific files
+.env
+
+# Ignore temporary files
+*.swp
+*.swo
+
+# Ignore IDE-specific files and directories
+.idea/
+.vscode/
+
+# Ignore pycache directory
+__pycache__/
+
+# Ignore Docker-related files
+docker-compose.yml
+Dockerfile
