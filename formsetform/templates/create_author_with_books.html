@@ -107,16 +107,22 @@
                 // Function to add a new book form
                 $("#add-book").click(function () {
                     var formCount = $("#id_book-TOTAL_FORMS").val();
-                    var newForm = $("#book-forms-0").clone();
-                    console.log(formCount,'clicked')
+                    var newForm = $("#book-forms :first").clone();
+                    var newFormId = newForm.attr('id');
 
+                    // Extract the numeric part from the id attribute value using a regular expression
+                    var numericPart = newFormId.match(/\d+/);
+
+                    // Convert the extracted numeric part to a number if needed
+                    var numericValue = numericPart ? parseInt(numericPart[0], 10) : null;
+                    console.log(formCount,'clicked',numericValue)
                     // Update form indices and clear input values
                     newForm.find(":input").each(function () {
                         console.log($(this));
                         var name = $(this)
                             .attr("name")
                             .replace(
-                                "-" + 0 + "-",
+                                "-" + numericValue + "-",
                                 "-" + formCount + "-"
                             );
                         var id = "id_" + name;
